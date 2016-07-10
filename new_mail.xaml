@@ -1,0 +1,45 @@
+﻿<Page
+    x:Class="MidtermProject.new_mail"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MidtermProject"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock x:Name="textBlock" Grid.Row="0" Text="send mail" Style="{StaticResource HeaderTextBlockStyle}"/>
+        <Image Source="Assets/Background2.jpg" Stretch="UniformToFill" Grid.RowSpan="2">
+        </Image>
+        <Grid Grid.Row="1">
+            <ScrollViewer>
+                <StackPanel >
+                    <TextBox 
+                        x:Name="t" Width="350" Header="receiver" Background="White" Margin="0,12,0,0" />
+                    <TextBox  
+                        x:Name="Title" Width="350" Header="Title" Background="White"  Margin="0,12,0,0" />
+                    <TextBox Width="350" 
+                            x:Name="Details" Height="260" Margin="0,12,0,0" 
+                             Background="White" Header="content" />
+                    
+                    <RelativePanel Width="350" Margin="0,24,0,0">
+                        <Button x:Name="createButton" Foreground="White"
+                                Click="createButton_Click_1" Content="send"></Button>
+                        <Button x:Name="CancelButton"
+                                Foreground="White" Click="CancelButton_Click" Content="Cancel" RelativePanel.AlignRightWithPanel="True"></Button>
+                    </RelativePanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton x:Name="DeleteAppBarButton" Icon="Delete" Label="Delete" />
+        </CommandBar>
+    </Page.BottomAppBar>
+</Page>
