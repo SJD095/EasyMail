@@ -46,6 +46,38 @@ namespace MidtermProject
         {
             Frame.Navigate(typeof(RegesiterScene), "");
         }
+        
+        //用户登录逻辑和网络访问
+        async private void Login_Click(object sender, RoutedEventArgs e)
+        {
+            if(Username.Text == "")
+            {
+                var i = new MessageDialog("Please enter the username!").ShowAsync();
+                return;
+            }
 
+            if (Password.Password == "")
+            {
+                var i = new MessageDialog("Please enter the password!").ShowAsync();
+                return;
+            }
+
+            string data = Username.Text + '\t' + Password.Password;
+            HttpClient httpClient = new HttpClient();
+            HttpResponseMessage response = await httpClient.PostAsync("http://sunzhongyang.com:7000/login", new StringContent(data));
+            string receive = await response.Content.ReadAsStringAsync();
+            
+            if (receive == "Login success")
+            {
+                this.localseetings.Values["user"] = Username.Text;
+                this.localseetings.Values["box"] = "receive";
+                Frame.Navigate(typeof(MailPage), "");
+
+            }
+            else
+            {
+                var c = new MessageDialog(receive).ShowAsync();
+            }
+        }
     }
 }
