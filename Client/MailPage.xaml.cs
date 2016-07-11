@@ -143,6 +143,7 @@ namespace MidtermProject
             var i = new MessageDialog(result).ShowAsync();
         }
 
+        //从数据库中取出对应用户的邮件
         public string Sql_Select(string query_input)
         {
             string result = "";
