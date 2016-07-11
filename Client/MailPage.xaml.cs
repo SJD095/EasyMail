@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -27,6 +27,23 @@ namespace MidtermProject
 {
     public sealed partial class MailPage : Page
     {
+        MailViewModel Mailbox;
+        DispatcherTimer timer;
+        ApplicationDataContainer localseetings = Windows.Storage.ApplicationData.Current.LocalSettings;
+        ObservableCollection<Mail> source =  new ObservableCollection<Mail>();
+        bool onpage = true;
+        DataTransferManager dtm;
+
+        public MailPage()
+        {
+            this.InitializeComponent();
+            //var viewTitleBar = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TitleBar;
+            //viewTitleBar.BackgroundColor = Windows.UI.Colors.CornflowerBlue;
+            //viewTitleBar.ButtonBackgroundColor = Windows.UI.Colors.CornflowerBlue;
+
+            listview.ItemsSource = source;
+            Mailbox = new MailViewModel();
+        }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -49,6 +66,39 @@ namespace MidtermProject
             }
         }
 
+        // list元素点击事件
+        private void ListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            Mailbox.selectmail = (Mail)(e.ClickedItem);
+            title.Text = Mailbox.selectmail.title;
+            if (localseetings.Values["box"].ToString() == "receive")  this.sender.Text = Mailbox.selectmail.sender;
+            else this.sender.Text = Mailbox.selectmail.receiver;
+            content.Text = Mailbox.selectmail.content;
+            this.show_content.Opacity = 0.95;
+            time.Text = Mailbox.selectmail.time;
+
+            this.show_content.Visibility = Visibility.Visible;
+            showmail.Visibility = Visibility.Collapsed;
+
+        }
+
+        // Visual State自适应页面
+        private void New_mail_Click()
+        {
+            // 页面宽度不够时新建信息会在新页面执行
+            if (this.ActualWidth > 650)
+            {
+                this.show_content.Visibility = Visibility.Collapsed;
+                showmail.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                Frame.Navigate(typeof(new_mail), Mailbox);
+                onpage = false;
+            }
+        }
+
+        // 设定按钮点击事件
         private void setting_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(Account), "");
