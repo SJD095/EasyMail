@@ -32,6 +32,19 @@ namespace MidtermProject
             this.InitializeComponent();
             this.Suspending += OnSuspending;
 
+            string sql = @"CREATE TABLE IF NOT EXISTS
+                            mail     (user       VARCHAR( 140 ),
+                                      mailbox    VARCHAR( 140 ),
+                                      sender  VARCHAR( 140 ),
+                                      receiver     VARCHAR( 140 ),
+                                      title     VARCHAR( 140 ),
+                                      time     VARCHAR( 140 ),
+                                      content     VARCHAR( 140 ));";
+
+            using (var statement = conn.Prepare(sql))
+            {
+                statement.Step();
+            }
         }
 
         /// <summary>
@@ -80,7 +93,7 @@ namespace MidtermProject
             Window.Current.Activate();
 
             // register a global listener for the BackRequested event
-            // You can register for this event in each page if you want to exclude specific pages from back navigation,
+            // You can register for this event in each page if you want to exclude specific pages from back navigation, 
             // or you want to execute page-level code before displaying the page.
             Windows.UI.Core.SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
         }
@@ -115,7 +128,7 @@ namespace MidtermProject
             if (rootFrame == null)
                 return;
 
-            // Navigate back if possible, and if the event has not
+            // Navigate back if possible, and if the event has not 
             // already been handled .
             if (rootFrame.CanGoBack && e.Handled == false)
             {
