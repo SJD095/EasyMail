@@ -49,7 +49,32 @@ namespace MidtermProject
                     AppViewBackButtonVisibility.Collapsed;
             }
         }
+        
+        //用户更改密码逻辑和网络访问
+        async private void Register_Click(object sender, RoutedEventArgs e)
+        {
 
+            if (Username.Password == "")
+            {
+                var i = new MessageDialog("Please enter the username!").ShowAsync();
+                return;
+            }
+
+            if (newPassword.Password != Configure.Password || newPassword.Password == "")
+            {
+                var i = new MessageDialog("Please check the password!").ShowAsync();
+                return;
+            }
+
+            if (Agree.IsChecked == false) return;
+
+            string data =  localseetings.Values["user"].ToString() + '\t' + Username.Password + '\t' + newPassword.Password;
+            HttpClient httpClient = new HttpClient();
+            HttpResponseMessage response = await httpClient.PostAsync("http://sunzhongyang.com:7000/change", new StringContent(data));
+            string receive = await response.Content.ReadAsStringAsync();
+            var c = new MessageDialog(receive).ShowAsync();
+            if (receive == "change success") Frame.Navigate(typeof(MainPage), "");
+        }
     }
 
 }
