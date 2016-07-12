@@ -44,6 +44,18 @@ namespace MidtermProject
             listview.ItemsSource = source;
             Mailbox = new MailViewModel();
         }
+        
+        //检查新信息和磁贴功能
+        async void check_mail()
+        {
+            string data = localseetings.Values["user"].ToString();
+            HttpClient httpClient = new HttpClient();
+            
+            HttpResponseMessage response = await httpClient.PostAsync("http://sunzhongyang.com:7001/check", new StringContent(data));
+            string receive = await response.Content.ReadAsStringAsync();
+            
+
+        }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
