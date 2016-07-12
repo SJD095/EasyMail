@@ -99,6 +99,7 @@ namespace MidtermProject
         }
 
         // 设定按钮点击事件
+>>>>>>> SDP-EasyMail/master
         private void setting_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(Account), "");
