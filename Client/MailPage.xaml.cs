@@ -53,7 +53,111 @@ namespace MidtermProject
             
             HttpResponseMessage response = await httpClient.PostAsync("http://sunzhongyang.com:7001/check", new StringContent(data));
             string receive = await response.Content.ReadAsStringAsync();
-            
+            if (receive != "No")
+            {
+                string[] mail = receive.Split('\n');
+                var idf = new MessageDialog("You have got a mail from " + mail[1]).ShowAsync();
+                var db = App.conn;
+
+                var custstmt = db.Prepare("INSERT INTO mail (user, mailbox, sender, receiver, title, time, content) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                
+                custstmt.Bind(1, localseetings.Values["user"].ToString());
+                custstmt.Bind(2, "receiver_box");
+                custstmt.Bind(3, mail[1]);
+                custstmt.Bind(4, mail[0]);
+                custstmt.Bind(5, mail[2]);
+                custstmt.Bind(6, mail[3]);
+                custstmt.Bind(7, mail[4]);
+                custstmt.Step();
+
+                if (localseetings.Values["box"].ToString() == "receive")
+                {
+                    Sql_Select_mailbox("receiver_box");
+                }
+
+                string from = source[0].receiver;
+                string subject = source[0].title;
+
+                TileContent content = new TileContent()
+                {
+                    Visual = new TileVisual()
+                    {
+                        DisplayName = "Todos",
+
+                        TileSmall = new TileBinding()
+                        {
+                            Content = new TileBindingContentAdaptive()
+                            {
+                                Children =
+                {
+                    new TileText()
+                    {
+                        Text = from
+                    },
+
+                    new TileText()
+                    {
+                        Text = subject,
+                        Style = TileTextStyle.CaptionSubtle
+                    },
+                }
+                            }
+                        },
+                        TileMedium = new TileBinding()
+                        {
+                            Content = new TileBindingContentAdaptive()
+                            {
+                                Children =
+                {
+                    new TileText()
+                    {
+                        Text = from
+                    },
+
+                    new TileText()
+                    {
+                        Text = subject,
+                        Style = TileTextStyle.CaptionSubtle
+                    },
+                }
+                            }
+                        },
+
+                        TileWide = new TileBinding()
+                        {
+                            Content = new TileBindingContentAdaptive()
+                            {
+                                Children =
+                {
+                    new TileText()
+                    {
+                        Text = from,
+                        Style = TileTextStyle.Subtitle
+                    },
+
+                    new TileText()
+                    {
+                        Text = subject,
+                        Style = TileTextStyle.CaptionSubtle
+                    },
+                }
+                            }
+                        }
+                    }
+                };
+
+                var notification = new TileNotification(content.GetXml());
+
+                TileUpdateManager.CreateTileUpdaterForApplication().Update(notification);
+
+                if (SecondaryTile.Exists("MySecondaryTile"))
+                {
+                    var updater = TileUpdateManager.CreateTileUpdaterForSecondaryTile("MySecondaryTile");
+
+                    updater.Update(notification);
+                }
+
+            }
 
         }
 
