@@ -275,6 +275,45 @@ namespace MidtermProject
             }
         }
 
+        // 实现创建按钮的点击事件和异步绑定功能
+        async private void createButton_Click_1(object sender, RoutedEventArgs e)
+        {
+            string data = t.Text + "\t" + '\n' + localseetings.Values["user"].ToString() + '\n' + Title.Text + '\n' + "2016" + '\n' + Details.Text;
+            HttpClient httpClient = new HttpClient();
+            HttpResponseMessage response = await httpClient.PostAsync("http://sunzhongyang.com:7001/send", new StringContent(data));
+            string receive = await response.Content.ReadAsStringAsync();
+            if (receive == "success")
+            {
+                var ix = new MessageDialog("success").ShowAsync();
+
+                var db = App.conn;
+
+                var custstmt = db.Prepare("INSERT INTO mail (user, mailbox, sender, receiver, title, time, content) VALUES (?, ?, ?, ?, ?, ?, ?)");
+
+                custstmt.Bind(1, localseetings.Values["user"].ToString());
+                custstmt.Bind(2, "sender_box");
+                custstmt.Bind(3, localseetings.Values["user"].ToString());
+                custstmt.Bind(4, t.Text);
+                custstmt.Bind(5, Title.Text);
+                custstmt.Bind(6, "2016");
+                custstmt.Bind(7, Details.Text);
+                custstmt.Step();
+
+                if (localseetings.Values["box"].ToString() == "send")
+                {
+                    Sql_Select_mailbox("sender_box");
+                }
+            }
+
+            else
+            {
+                var i = new MessageDialog("failed").ShowAsync();
+            }
+
+            t.Text = "";
+            Title.Text = "";
+            Details.Text = "";
+        }
 
         private void AppBarButton_Click(object sender, RoutedEventArgs e)
         {
