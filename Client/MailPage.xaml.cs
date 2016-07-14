@@ -330,6 +330,7 @@ namespace MidtermProject
             string receive = await response.Content.ReadAsStringAsync();
 
             //如果发送成功则将发送成功的邮件存入数据库
+
             if (receive == "success")
             {
                 var ix = new MessageDialog("success").ShowAsync();
@@ -401,6 +402,15 @@ namespace MidtermProject
             DataTransferManager.ShowShareUI();
         }
 
+        // 实现数据请求和分享功能
+        void dtm_DataRequested(DataTransferManager sender, DataRequestedEventArgs e)
+        {
+            string textSource = content.Text;
+            string textTitle = title.Text;
+            DataPackage data = e.Request.Data;
+            data.Properties.Title = textTitle;
+            data.SetText(textSource);
+        }
 
         // 实现数据请求和分享功能
         void dtm_DataRequested(DataTransferManager sender, DataRequestedEventArgs e)

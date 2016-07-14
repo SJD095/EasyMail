@@ -57,7 +57,7 @@ namespace MidtermProject
                     AppViewBackButtonVisibility.Collapsed;
             }
         }
-        
+
         //用户注册
         async private void Register_Click(object sender, RoutedEventArgs e)
         {
