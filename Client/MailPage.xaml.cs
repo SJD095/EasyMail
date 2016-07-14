@@ -55,7 +55,7 @@ namespace MidtermProject
             listview.ItemsSource = source;
             Mailbox = new MailViewModel();
 
-            //计时器每0.5秒检查一次新邮件，如果有新邮件则跳转到check_mail()函数
+            // 创建后台线程定时器，每5秒检查一次新信息
             timer = new DispatcherTimer();
             timer.Tick += (s, e) => {
                 if(onpage == true) check_mail();
@@ -401,7 +401,8 @@ namespace MidtermProject
             DataTransferManager.ShowShareUI();
         }
 
-        //向系统发送分享的内容
+
+        // 实现数据请求和分享功能
         void dtm_DataRequested(DataTransferManager sender, DataRequestedEventArgs e)
         {
             string textSource = content.Text;
