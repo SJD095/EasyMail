@@ -307,6 +307,15 @@ namespace MidtermProject
             DataTransferManager.ShowShareUI();
         }
 
+        // 实现数据请求和分享功能
+        void dtm_DataRequested(DataTransferManager sender, DataRequestedEventArgs e)
+        {
+            string textSource = content.Text;
+            string textTitle = title.Text;
+            DataPackage data = e.Request.Data;
+            data.Properties.Title = textTitle;
+            data.SetText(textSource);
+        }
 
         private void Query_button_Click(object sender, RoutedEventArgs e)
         {
