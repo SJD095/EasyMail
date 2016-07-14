@@ -1,4 +1,7 @@
-﻿using System;
+﻿//13331233 孙中阳
+//szy@sunzhongyang.com
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,39 +24,41 @@ using Windows.UI.Xaml.Navigation;
 
 namespace MidtermProject
 {
+    //这里仅有类的一部分，另一部分由VS自动生成，所以带有partial标记
     public sealed partial class Account : Page
     {
+        //提供本地数据存储以存储页面状态
         ApplicationDataContainer localseetings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+        //默认初始化
         public Account()
         {
             this.InitializeComponent();
-            //var viewTitleBar = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TitleBar;
-            //viewTitleBar.BackgroundColor = Windows.UI.Colors.CornflowerBlue;
-            //viewTitleBar.ButtonBackgroundColor = Windows.UI.Colors.CornflowerBlue;
+
         }
 
+        //导航到此页面时执行的动作
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             Frame rootFrame = Window.Current.Content as Frame;
 
+            //如果可返回则显示返回按钮
             if (rootFrame.CanGoBack)
             {
-                // Show UI in title bar if opted-in and in-app backstack is not empty.
                 SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
                     AppViewBackButtonVisibility.Visible;
             }
             else
             {
-                // Remove the UI from the title bar if in-app back stack is empty.
                 SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
                     AppViewBackButtonVisibility.Collapsed;
             }
         }
-        
-        //用户更改密码逻辑和网络访问
+
+        //点击更改按钮
         async private void Register_Click(object sender, RoutedEventArgs e)
         {
-
+            //检查输入是否合法
             if (Username.Password == "")
             {
                 var i = new MessageDialog("Please enter the username!").ShowAsync();
@@ -66,13 +71,19 @@ namespace MidtermProject
                 return;
             }
 
+            //查看是否同意用户协议
             if (Agree.IsChecked == false) return;
 
+            //根据本地文件存储的用户信息等向服务器发送确认信息
             string data =  localseetings.Values["user"].ToString() + '\t' + Username.Password + '\t' + newPassword.Password;
             HttpClient httpClient = new HttpClient();
             HttpResponseMessage response = await httpClient.PostAsync("http://sunzhongyang.com:7000/change", new StringContent(data));
             string receive = await response.Content.ReadAsStringAsync();
+
+            //显示服务器返回内容
             var c = new MessageDialog(receive).ShowAsync();
+
+            //如果更改用户信息成功则导航到登录页面，到登录页面后不可点击返回按钮返回到本此页面
             if (receive == "change success") Frame.Navigate(typeof(MainPage), "");
         }
     }
