@@ -1,4 +1,7 @@
-﻿using System;
+﻿//13331233 孙中阳
+//szy@sunzhongyang.com
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,18 +24,19 @@ using Windows.UI.Xaml.Navigation;
 
 namespace MidtermProject
 {
-    /// <summary>
-    /// 可用于自身或导航至 Frame 内部的空白页。
-    /// </summary>
+    //这里仅有类的一部分，另一部分由VS自动生成，所以带有partial标记
     public sealed partial class MainPage : Page
     {
+        //设置本地存储，用于保存页面信息
         ApplicationDataContainer localseetings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+        //默认初始化
         public MainPage()
         {
             this.InitializeComponent();
 
         }
-
+        //被导航到页面后确定顶部导航栏
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             Frame rootFrame = Window.Current.Content as Frame;
@@ -41,13 +45,13 @@ namespace MidtermProject
                     AppViewBackButtonVisibility.Collapsed;
         }
 
-
+        //点击注册按钮后跳转至注册页面
         private void Regester_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(RegesiterScene), "");
         }
-        
-        //用户登录逻辑和网络访问
+
+        //点击登录按钮后登录，检查必要的信息是否完整，并显示登录是否成功
         async private void Login_Click(object sender, RoutedEventArgs e)
         {
             if(Username.Text == "")
@@ -62,11 +66,13 @@ namespace MidtermProject
                 return;
             }
 
+            //发送用户名和密码
             string data = Username.Text + '\t' + Password.Password;
             HttpClient httpClient = new HttpClient();
             HttpResponseMessage response = await httpClient.PostAsync("http://sunzhongyang.com:7000/login", new StringContent(data));
             string receive = await response.Content.ReadAsStringAsync();
-            
+
+            //登录成功
             if (receive == "Login success")
             {
                 this.localseetings.Values["user"] = Username.Text;
@@ -74,6 +80,8 @@ namespace MidtermProject
                 Frame.Navigate(typeof(MailPage), "");
 
             }
+
+            //登录不成功
             else
             {
                 var c = new MessageDialog(receive).ShowAsync();

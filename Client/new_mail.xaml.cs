@@ -1,4 +1,7 @@
-﻿using System;
+﻿//13331233 孙中阳
+//szy@sunzhongyang.com
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,21 +23,31 @@ using Windows.UI.Xaml.Navigation;
 
 namespace MidtermProject
 {
+    //这里仅有类的一部分，另一部分由VS自动生成，所以带有partial标记
     public sealed partial class new_mail : Page
     {
+        //建立MailBox对象，用于完成数据绑定功能，当绑定的数据发生变化后通知UI
         MailViewModel Mailbox = new MailViewModel();
+
+        //提供本地数据存储以存储页面状态
         ApplicationDataContainer localseetings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+        //执行默认初始化
         public new_mail()
         {
             this.InitializeComponent();
         }
 
+        //点击发信按钮
         async private void createButton_Click_1(object sender, RoutedEventArgs e)
         {
+            //构造发送的邮件的内容并发送至服务器
             string data =  t.Text + "\t" + '\n' + localseetings.Values["user"].ToString() + '\n' + Title.Text + '\n' + "2016" + '\n' + Details.Text;
             HttpClient httpClient = new HttpClient();
             HttpResponseMessage response = await httpClient.PostAsync("http://sunzhongyang.com:7001/send", new StringContent(data));
             string receive = await response.Content.ReadAsStringAsync();
+
+            //如发送成功则将信件信息存入数据库
             if (receive == "success")
             {
                 var i = new MessageDialog("success").ShowAsync();
@@ -55,10 +68,12 @@ namespace MidtermProject
 
             else
             {
+                //发送不成功则弹出窗口提示
                 var i = new MessageDialog("failed").ShowAsync();
             }
         }
 
+        //设置导航到此页面时默认执行的动作
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
@@ -69,6 +84,7 @@ namespace MidtermProject
             }
         }
 
+        //点击取消按钮返回邮件页面
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(MailPage), Mailbox);

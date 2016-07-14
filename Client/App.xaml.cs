@@ -1,4 +1,7 @@
-﻿using SQLitePCL;
+﻿//13331233 孙中阳
+//szy@sunzhongyang.com
+
+using SQLitePCL;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,9 +21,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace MidtermProject
 {
-    /// <summary>
-    /// 提供特定于应用程序的行为，以补充默认的应用程序类。
-    /// </summary>
+    //这里仅有类的一部分，另一部分由VS自动生成，所以带有partial标记
     sealed partial class App : Application
     {
         public static SQLiteConnection conn = new SQLiteConnection("sqlitep.db");
@@ -32,6 +33,7 @@ namespace MidtermProject
             this.InitializeComponent();
             this.Suspending += OnSuspending;
 
+            //初始化数据库
             string sql = @"CREATE TABLE IF NOT EXISTS
                             mail     (user       VARCHAR( 140 ),
                                       mailbox    VARCHAR( 140 ),
@@ -93,7 +95,7 @@ namespace MidtermProject
             Window.Current.Activate();
 
             // register a global listener for the BackRequested event
-            // You can register for this event in each page if you want to exclude specific pages from back navigation, 
+            // You can register for this event in each page if you want to exclude specific pages from back navigation,
             // or you want to execute page-level code before displaying the page.
             Windows.UI.Core.SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
         }
@@ -128,7 +130,7 @@ namespace MidtermProject
             if (rootFrame == null)
                 return;
 
-            // Navigate back if possible, and if the event has not 
+            // Navigate back if possible, and if the event has not
             // already been handled .
             if (rootFrame.CanGoBack && e.Handled == false)
             {
