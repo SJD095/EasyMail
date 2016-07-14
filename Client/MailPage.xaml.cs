@@ -43,9 +43,9 @@ namespace MidtermProject
 
             listview.ItemsSource = source;
             Mailbox = new MailViewModel();
-			
-			// 创建后台线程定时器，每5秒检查一次新信息
-			imer = new DispatcherTimer();
+
+            // 创建后台线程定时器，每5秒检查一次新信息
+            timer = new DispatcherTimer();
             timer.Tick += (s, e) => {
                 if(onpage == true) check_mail();
             };
