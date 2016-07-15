@@ -58,32 +58,6 @@ namespace MidtermProject
             }
         }
 
-        //用户注册
-        async private void Register_Click(object sender, RoutedEventArgs e)
-        {
-
-            if (Username.Text == "")
-            {
-                var i = new MessageDialog("Please enter the username!").ShowAsync();
-                return;
-            }
-
-            if (Password.Password != Configure.Password || Password.Password == "")
-            {
-                var i = new MessageDialog("Please check the password!").ShowAsync();
-                return;
-            }
-
-            if (Agree.IsChecked == false) return;
-
-            string data =Username.Text + '\t' + Password.Password;
-            HttpClient httpClient = new HttpClient();
-            HttpResponseMessage response = await httpClient.PostAsync("http://sunzhongyang.com:7000/register", new StringContent(data));
-            string receive = await response.Content.ReadAsStringAsync();
-            var c = new MessageDialog(receive).ShowAsync();
-
-        }
-
         //点击注册按钮执行注册
         async private void Register_Click(object sender, RoutedEventArgs e)
         {

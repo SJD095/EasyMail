@@ -14,14 +14,6 @@ namespace MidtermProject
         public string time { get; set; }
         public string content { get; set; }
 
-        //public Mail(string sender, string receiver, string title, string time, string content)
-        //{
-        //    this.sender = sender;
-        //    this.receiver = receiver;
-        //    this.title = title;
-        //    this.time = time;
-        //    this.content = content;
-        //}
     }
 
 }
