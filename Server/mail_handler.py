@@ -49,8 +49,10 @@ class checkHandler(tornado.web.RequestHandler):
 
                 #获取返回邮件后将字典中收件人对应的邮件置空
                 receiver_mailcontent[text] = ""
+            else:
+                result = "No"
+        else:
             result = "No"
-        result = "No"
 
         self.write(result)
 
